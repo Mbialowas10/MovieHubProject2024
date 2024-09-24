@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.mbialowas.moviehubproject2024.screens.MovieScreen
 import com.mbialowas.moviehubproject2024.ui.theme.MovieHubProject2024Theme
 
 class MainActivity : ComponentActivity() {
@@ -20,28 +21,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             MovieHubProject2024Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    // code to draw the screen goes here
+                    MovieScreen(modifier = Modifier.padding(innerPadding))
+
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MovieHubProject2024Theme {
-        Greeting("Android")
-    }
-}
