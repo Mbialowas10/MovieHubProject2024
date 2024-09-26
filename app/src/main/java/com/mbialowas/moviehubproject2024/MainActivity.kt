@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mbialowas.moviehubproject2024.destinations.Destination
@@ -23,7 +24,9 @@ import com.mbialowas.moviehubproject2024.screens.FavoriteScreen
 
 
 import com.mbialowas.moviehubproject2024.screens.MovieScreen
+import com.mbialowas.moviehubproject2024.screens.SearchScreen
 import com.mbialowas.moviehubproject2024.ui.theme.MovieHubProject2024Theme
+import com.mbialowas.moviehubproject2024.view.Navigation.BottomNav
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,18 +57,22 @@ fun App(navController: NavHostController, modifier: Modifier){
                 title = { Text(text = "MovieHub Fall 2024") }
             )
         },
-        //bottomBar = { BottonNavBar(navController = navController) }
+        bottomBar = { BottomNav(navController = navController) }
 
     ){ paddingValues ->
         paddingValues.calculateBottomPadding()
         Spacer(modifier = Modifier.padding(10.dp))
 
-        NavHost(navController = navController, startDestination = Destination.Movie.route){
+        NavHost(navController = navController as NavHostController, startDestination = Destination.Movie.route){
             composable(Destination.Movie.route){
-                MovieScreen(modifier = Modifier.padding(paddingValues)))
+                MovieScreen(modifier = Modifier.padding(paddingValues))
             }
             composable(Destination.Watch.route){
                 FavoriteScreen(modifier = Modifier.padding(paddingValues))
+            }
+            composable(Destination.Search.route){
+                SearchScreen(modifier = Modifier.padding(paddingValues))
+            }
         }
     }
 }
