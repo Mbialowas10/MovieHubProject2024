@@ -29,7 +29,7 @@ fun BottomNav(navController: NavController){
                 popUpTo(Destination.Movie.route)
                 launchSingleTop = true
             }},
-            icon = { Icon(painter = ic_movie, contentDescription = "Movie Sceen icon") },
+            icon = { Icon(painter = ic_movie, contentDescription = "Movie Screen icon") },
             label = {
                 Text(text = Destination.Movie.route)
             }
@@ -42,7 +42,7 @@ fun BottomNav(navController: NavController){
                 popUpTo(Destination.Search.route)
                 launchSingleTop = true
             }},
-            icon = { Icon(painter = ic_search, contentDescription = "Search Sceen icon") },
+            icon = { Icon(painter = ic_search, contentDescription = "Search Screen icon") },
             label = {
                 Text(text = Destination.Search.route)
             }
@@ -55,7 +55,7 @@ fun BottomNav(navController: NavController){
                 popUpTo(Destination.Watch.route)
                 launchSingleTop = true
             }},
-            icon = { Icon(painter = ic_watch, contentDescription = "Watch Later Sceen icon") },
+            icon = { Icon(painter = ic_watch, contentDescription = "Watch Later Screen icon") },
             label = {
                 Text(text = Destination.Watch.route)
             }
