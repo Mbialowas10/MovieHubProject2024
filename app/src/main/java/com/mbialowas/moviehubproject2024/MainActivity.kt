@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mbialowas.moviehubproject2024.api.MoviesManager
 import com.mbialowas.moviehubproject2024.destinations.Destination
 import com.mbialowas.moviehubproject2024.screens.FavoriteScreen
 
@@ -39,8 +40,12 @@ class MainActivity : ComponentActivity() {
 
                 ) { innerPadding ->
                     val navController = rememberNavController()
+
+                    // fetch data
+                    val moviesManager = MoviesManager()
+
                     //MovieScreen(modifier = Modifier.padding(innerPadding))
-                    App(navController = navController, modifier = Modifier.padding(innerPadding))
+                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager)
 
 
                 }
@@ -50,7 +55,7 @@ class MainActivity : ComponentActivity() {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(navController: NavHostController, modifier: Modifier){
+fun App(navController: NavHostController, modifier: Modifier, moviesManager: MoviesManager){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -65,7 +70,7 @@ fun App(navController: NavHostController, modifier: Modifier){
 
         NavHost(navController = navController as NavHostController, startDestination = Destination.Movie.route){
             composable(Destination.Movie.route){
-                MovieScreen(modifier = Modifier.padding(paddingValues))
+                MovieScreen(modifier = Modifier.padding(paddingValues), moviesManager)
             }
             composable(Destination.Watch.route){
                 FavoriteScreen(modifier = Modifier.padding(paddingValues))
