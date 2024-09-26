@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
 
                     // code to draw the screen goes here
 //                    MovieScreen(modifier = Modifier.padding(innerPadding))
-                    App(navController = navController, modifier = Modifier.padding(innerPadding))
+                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager)
 
                 }
             }
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(navController: NavController, modifier: Modifier = Modifier) {
+fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManager: MoviesManager) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -66,7 +66,7 @@ fun App(navController: NavController, modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.padding(10.dp))
         NavHost(navController = navController as NavHostController, startDestination = Destination.Movie.route) {
             composable(Destination.Movie.route) {
-                MovieScreen()
+                MovieScreen(modifier = modifier, moviesManager)
             }
             composable(Destination.Watch.route) {
                 WatchScreen()

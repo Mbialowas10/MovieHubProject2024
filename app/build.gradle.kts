@@ -54,6 +54,9 @@ dependencies {
     // moshi
     implementation(libs.moshi.kotlin)
     implementation(libs.converter.moshi)
+    // coil
+    implementation(libs.coil)
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
