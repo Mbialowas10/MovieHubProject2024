@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 
 import androidx.navigation.compose.rememberNavController
 import com.mbialowas.moviehubproject2024.Navigation.BottomNav
+import com.mbialowas.moviehubproject2024.api.MoviesManager
 import com.mbialowas.moviehubproject2024.destinations.Destination
 import com.mbialowas.moviehubproject2024.screens.MovieScreen
 import com.mbialowas.moviehubproject2024.screens.SearchScreen
@@ -38,6 +39,10 @@ class MainActivity : ComponentActivity() {
             MovieHubProject2024Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
+
+                    //fetch movie data from api
+                    val moviesManager: MoviesManager = MoviesManager
+
                     // code to draw the screen goes here
 //                    MovieScreen(modifier = Modifier.padding(innerPadding))
                     App(navController = navController, modifier = Modifier.padding(innerPadding))
