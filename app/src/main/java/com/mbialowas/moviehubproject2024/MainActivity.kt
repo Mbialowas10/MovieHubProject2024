@@ -70,7 +70,7 @@ fun App(navController: NavHostController, modifier: Modifier, moviesManager: Mov
 
         NavHost(navController = navController as NavHostController, startDestination = Destination.Movie.route){
             composable(Destination.Movie.route){
-                MovieScreen(modifier = Modifier.padding(paddingValues), moviesManager)
+                MovieScreen(modifier = Modifier.padding(paddingValues), moviesManager, navController )
             }
             composable(Destination.Watch.route){
                 FavoriteScreen(modifier = Modifier.padding(paddingValues))
