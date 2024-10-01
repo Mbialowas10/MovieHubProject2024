@@ -24,7 +24,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mbialowas.moviehubproject2024.Navigation.BottomNav
 import com.mbialowas.moviehubproject2024.api.MoviesManager
+import com.mbialowas.moviehubproject2024.api.model.Movie
 import com.mbialowas.moviehubproject2024.destinations.Destination
+import com.mbialowas.moviehubproject2024.screens.MovieDetailScreen
 import com.mbialowas.moviehubproject2024.screens.MovieScreen
 import com.mbialowas.moviehubproject2024.screens.SearchScreen
 import com.mbialowas.moviehubproject2024.screens.WatchScreen
@@ -73,6 +75,11 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
             }
             composable(Destination.Search.route) {
                 SearchScreen()
+            }
+            composable(Destination.MovieDetail.route) { navBackStackEntry ->
+//                val movie = navBackStackEntry.arguments?.getString("movieId")
+                val movie = Movie(title="Fake Movie", overview = "Fake Overview", poster_path = "/fake.png")
+                MovieDetailScreen(movie)
             }
         }
     }

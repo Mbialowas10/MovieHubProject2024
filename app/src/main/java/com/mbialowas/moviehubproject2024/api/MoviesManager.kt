@@ -13,7 +13,7 @@ import retrofit2.Response
 
 object MoviesManager {
     private var _moviesResponse = mutableStateOf<List<Movie>>(emptyList()) // top level api call
-    val api_key: String ="a646415a2c909150ab04911d5dd9e352"
+    val api_key: String ="aaed4e12019db7b90c9cebd9c1082790"
 
     val movisResponse: MutableState<List<Movie>>
         @Composable get() = remember{

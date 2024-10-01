@@ -3,6 +3,7 @@ package com.mbialowas.moviehubproject2024.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,6 +62,9 @@ fun MovieCard(
         modifier = Modifier
             .border(1.dp, Color.Red, shape = RoundedCornerShape(10.dp))
             .padding(5.dp)
+            .clickable {
+                navController.navigate("movieDetail/${movie.id}")
+            }
     ){
         Row(
             modifier = Modifier
@@ -71,7 +75,7 @@ fun MovieCard(
             AsyncImage(
                 model = ImageRequest.Builder(
                     LocalContext.current
-                ).data("https://image.tmdb.org/t/p/w500/${movie.posterPath}")
+                ).data("https://image.tmdb.org/t/p/w500/${movie.poster_path}")
                     .build(),
                 contentDescription = movie.overview
             )
