@@ -21,7 +21,7 @@ fun MovieDetailScreen(modifier: Modifier) {
     ){
         Text(
             text = "Movie Detail Screen",
-            color = Color.White,
+            color = Color.Cyan,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             modifier = Modifier.align(Alignment.Center)
