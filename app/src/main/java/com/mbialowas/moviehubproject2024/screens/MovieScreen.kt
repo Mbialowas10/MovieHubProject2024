@@ -43,7 +43,7 @@ fun MovieScreen(modifier: Modifier = Modifier, moviesManager: MoviesManager , na
             modifier = modifier.align(Alignment.Center),
             text = "Movie Screen"
         )
-        val movies = moviesManager.movisResponse.value
+        val movies = moviesManager.moviesResponse.value
 
         LazyColumn{
             items(movies){ movie ->
