@@ -23,6 +23,7 @@ import com.mbialowas.moviehubproject2024.api.MoviesManager
 import com.mbialowas.moviehubproject2024.api.model.Movie
 import com.mbialowas.moviehubproject2024.destinations.Destination
 import com.mbialowas.moviehubproject2024.screens.FavoriteScreen
+import com.mbialowas.moviehubproject2024.screens.MovieDetailScreen
 
 
 import com.mbialowas.moviehubproject2024.screens.MovieScreen
@@ -81,6 +82,7 @@ fun App(navController: NavHostController, modifier: Modifier, moviesManager: Mov
             }
             composable(Destination.MovieDetail.route){
                 val movie = Movie(title="Fake Movie", overview = "This is a fake movie", poster_path = "fake.jpg")
+                MovieDetailScreen(modifier = Modifier.padding(paddingValues), movie = movie)
             }
         }
     }
