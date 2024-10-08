@@ -12,6 +12,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 
 import androidx.compose.ui.unit.dp
@@ -32,6 +36,8 @@ import com.mbialowas.moviehubproject2024.screens.MovieScreen
 import com.mbialowas.moviehubproject2024.screens.SearchScreen
 import com.mbialowas.moviehubproject2024.screens.WatchScreen
 import com.mbialowas.moviehubproject2024.ui.theme.MovieHubProject2024Theme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +56,7 @@ class MainActivity : ComponentActivity() {
 
                     // code to draw the screen goes here
 //                    MovieScreen(modifier = Modifier.padding(innerPadding))
-                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager)
+                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager,db)
 
                 }
             }
@@ -59,7 +65,11 @@ class MainActivity : ComponentActivity() {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManager: MoviesManager) {
+fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManager: MoviesManager, db: AppDatabase) {
+    var movie by remember {
+        mutableStateOf<Movie?>(null)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -80,9 +90,14 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
                 SearchScreen()
             }
             composable(Destination.MovieDetail.route) { navBackStackEntry ->
-//                val movie = navBackStackEntry.arguments?.getString("movieId")
-                val movie = Movie(title="Fake Movie", overview = "Fake Overview", poster_path = "/fake.png")
-                MovieDetailScreen(movie)
+                val movie_id:String? = navBackStackEntry.arguments?.getString("movieID")
+                GlobalScope.launch{
+                    if (movie_id != null){
+                        movie = db.movieDao().getMovieById(movie_id.toInt())
+                    }
+                }
+
+                movie?.let { MovieDetailScreen(it) }
             }
         }
     }
