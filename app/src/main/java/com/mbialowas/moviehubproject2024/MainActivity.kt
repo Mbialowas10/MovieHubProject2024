@@ -97,7 +97,7 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
                     }
                 }
 
-                movie?.let { MovieDetailScreen(it) }
+                movie?.let { MovieDetailScreen(it, modifier = Modifier.padding()) }
             }
         }
     }
