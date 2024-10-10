@@ -39,11 +39,14 @@ import com.mbialowas.moviehubproject2024.db.AppDatabase
 import com.mbialowas.moviehubproject2024.mvvm.MovieViewModel
 
 @Composable
-fun SearchScreen(modifier: Modifier, viewModel: MovieViewModel, database: AppDatabase, navController: NavController){
+fun SearchScreen(modifier: Modifier, database: AppDatabase, navController: NavController){
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     //val viewModel: MovieViewModel = viewModel()
     //val movies: List<Movie> = viewModel.movies.value // get searched movies
+
+    // get access to view model
+    val viewModel: MovieViewModel = viewModel()
 
     var query by rememberSaveable { viewModel.searchTerm }
     Box(

@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
 
                     // code to draw the screen goes here
 //                    MovieScreen(modifier = Modifier.padding(innerPadding))
-                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager,db, viewModel)
+                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager,db)
 
                 }
             }
@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManager: MoviesManager, db: AppDatabase, viewModel: MovieViewModel) {
+fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManager: MoviesManager, db: AppDatabase) {
     var movie by remember {
         mutableStateOf<Movie?>(null)
     }
@@ -100,7 +100,7 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
                     WatchScreen()
                 }
                 composable(Destination.Search.route) {
-                    SearchScreen(modifier = Modifier.padding(innerPadding), viewModel, db, navController)
+                    SearchScreen(modifier = Modifier.padding(innerPadding), db, navController)
                 }
                 composable(Destination.MovieDetail.route) { navBackStackEntry ->
                     val movie_id:String? = navBackStackEntry.arguments?.getString("movieID")
