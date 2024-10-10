@@ -1,5 +1,6 @@
 package com.mbialowas.moviehubproject2024
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -34,6 +36,7 @@ import com.mbialowas.moviehubproject2024.api.MoviesManager
 import com.mbialowas.moviehubproject2024.api.model.Movie
 import com.mbialowas.moviehubproject2024.db.AppDatabase
 import com.mbialowas.moviehubproject2024.destinations.Destination
+import com.mbialowas.moviehubproject2024.mvvm.MovieViewModel
 import com.mbialowas.moviehubproject2024.screens.MovieDetailScreen
 import com.mbialowas.moviehubproject2024.screens.MovieScreen
 import com.mbialowas.moviehubproject2024.screens.SearchScreen
@@ -57,18 +60,22 @@ class MainActivity : ComponentActivity() {
                     //fetch movie data from api
                     val moviesManager: MoviesManager = MoviesManager(db)
 
+                    // initialize the viewmodel
+                    val viewModel: MovieViewModel = ViewModelProvider(this)[MovieViewModel::class.java]
+
                     // code to draw the screen goes here
 //                    MovieScreen(modifier = Modifier.padding(innerPadding))
-                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager,db)
+                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager,db, viewModel)
 
                 }
             }
         }
     }
 }
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManager: MoviesManager, db: AppDatabase) {
+fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManager: MoviesManager, db: AppDatabase, viewModel: MovieViewModel) {
     var movie by remember {
         mutableStateOf<Movie?>(null)
     }
@@ -77,7 +84,7 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
 //        topBar = {
 //            TopAppBar(
 //                title = { Text("MovieHub Project Fall 2024") }
-//            )
+//         q   )
 //        },
         content = { innerPadding ->
             Spacer(
@@ -93,7 +100,7 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
                     WatchScreen()
                 }
                 composable(Destination.Search.route) {
-                    SearchScreen(modifier = Modifier.padding(innerPadding))
+                    SearchScreen(modifier = Modifier.padding(innerPadding), viewModel, db, navController)
                 }
                 composable(Destination.MovieDetail.route) { navBackStackEntry ->
                     val movie_id:String? = navBackStackEntry.arguments?.getString("movieID")
