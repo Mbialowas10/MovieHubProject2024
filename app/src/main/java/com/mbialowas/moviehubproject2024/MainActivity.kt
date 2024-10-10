@@ -81,11 +81,11 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
     }
 
     Scaffold(
-//        topBar = {
-//            TopAppBar(
-//                title = { Text("MovieHub Project Fall 2024") }
-//            )
-//        },
+        topBar = {
+            TopAppBar(
+                title = { Text("MovieHub Project Fall 2024") }
+            )
+        },
         content = { innerPadding ->
             Spacer(
                 modifier = Modifier
