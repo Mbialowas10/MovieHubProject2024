@@ -26,7 +26,7 @@ class MovieViewModel : ViewModel() {
     // search term
     val searchTerm = mutableStateOf("")
 
-    val moviesReponse: MutableState<List<Movie>>
+    val moviesResponse: MutableState<List<Movie>>
         @Composable get() = remember {
             movies
         }
@@ -42,7 +42,7 @@ class MovieViewModel : ViewModel() {
                     movies.value = response.body()?.results ?: emptyList()
                     Log.i("MovieFound", movies.toString())
                     GlobalScope.launch {
-                        database.movieDao().insertAllMovies(movies.value)
+                        database.movieDao().insertAllMovies(movies=movies.value)
                     }
                 }
             }

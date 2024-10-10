@@ -84,7 +84,7 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
 //        topBar = {
 //            TopAppBar(
 //                title = { Text("MovieHub Project Fall 2024") }
-//         q   )
+//            )
 //        },
         content = { innerPadding ->
             Spacer(
