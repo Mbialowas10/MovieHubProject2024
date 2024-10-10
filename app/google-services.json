@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "813770382488",
+    "project_id": "moviehubproject2024-s278",
+    "storage_bucket": "moviehubproject2024-s278.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813770382488:android:498a64a0e22f901ec504ed",
+        "android_client_info": {
+          "package_name": "com.mbialowas.moviehubproject2024"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTnTBGvj1fR7wqzW_F91BSUEMP7Je03PU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
