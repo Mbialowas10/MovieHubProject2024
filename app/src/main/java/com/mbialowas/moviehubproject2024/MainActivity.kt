@@ -6,7 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -71,36 +74,42 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("MovieHub Project Fall 2024") }
+//        topBar = {
+//            TopAppBar(
+//                title = { Text("MovieHub Project Fall 2024") }
+//            )
+//        },
+        content = { innerPadding ->
+            Spacer(
+                modifier = Modifier
+                    .height(20.dp)
+                    .fillMaxWidth()
             )
-        }, bottomBar = { BottomNav(navController = navController) }
-    ) { paddingValues ->
-        paddingValues.calculateBottomPadding()
-        Spacer(modifier = Modifier.padding(10.dp))
-        NavHost(navController = navController as NavHostController, startDestination = Destination.Movie.route) {
-            composable(Destination.Movie.route) {
-                MovieScreen(modifier = modifier, moviesManager ,navController)
-            }
-            composable(Destination.Watch.route) {
-                WatchScreen()
-            }
-            composable(Destination.Search.route) {
-                SearchScreen()
-            }
-            composable(Destination.MovieDetail.route) { navBackStackEntry ->
-                val movie_id:String? = navBackStackEntry.arguments?.getString("movieID")
-                GlobalScope.launch{
-                    if (movie_id != null){
-                        movie = db.movieDao().getMovieById(movie_id.toInt())
-                    }
+            NavHost(navController = navController as NavHostController, startDestination = Destination.Movie.route) {
+                composable(Destination.Movie.route) {
+                    MovieScreen(modifier = modifier, moviesManager ,navController)
                 }
+                composable(Destination.Watch.route) {
+                    WatchScreen()
+                }
+                composable(Destination.Search.route) {
+                    SearchScreen(modifier = Modifier.padding(innerPadding))
+                }
+                composable(Destination.MovieDetail.route) { navBackStackEntry ->
+                    val movie_id:String? = navBackStackEntry.arguments?.getString("movieID")
+                    GlobalScope.launch{
+                        if (movie_id != null){
+                            movie = db.movieDao().getMovieById(movie_id.toInt())
+                        }
+                    }
 
-                movie?.let { MovieDetailScreen(it, modifier = Modifier.padding()) }
+                    movie?.let { MovieDetailScreen(it, modifier = Modifier.padding()) }
+                }
             }
-        }
-    }
+        },
+
+        bottomBar = { BottomNav(navController = navController) }
+    )
 }
 
 
