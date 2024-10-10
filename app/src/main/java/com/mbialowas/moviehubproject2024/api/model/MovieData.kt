@@ -10,4 +10,5 @@ data class MovieData(
     val page: Int,
     @Json(name = "results")
     val results: List<Movie>,
+
 )

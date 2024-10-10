@@ -52,16 +52,12 @@ android {
 
 dependencies {
 
-
-
     // moshi
     implementation(libs.moshi.kotlin)
     implementation(libs.converter.moshi)
-    // navigation
-    implementation(libs.androidx.navigation.compose)
-
-    // coil compose
+    // coil
     implementation(libs.coil.compose)
+
 
     // room
     implementation(libs.androidx.room.runtime)
@@ -78,7 +74,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.cronet.embedded)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

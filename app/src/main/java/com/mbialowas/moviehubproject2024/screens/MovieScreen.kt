@@ -1,6 +1,6 @@
 package com.mbialowas.moviehubproject2024.screens
 
-import android.util.Log
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,30 +28,27 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mbialowas.moviehubproject2024.api.MoviesManager
 import com.mbialowas.moviehubproject2024.api.model.Movie
-import com.mbialowas.moviehubproject2024.destinations.Destination
+
 
 
 @Composable
-fun MovieScreen(modifier: Modifier = Modifier, moviesManager: MoviesManager, navController: NavController){
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.Blue)
-
+fun MovieScreen(modifier: Modifier = Modifier, moviesManager: MoviesManager , navController: NavController){
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color.Blue)
     ){
         Text(
-            text = "Movie Screen",
             color = Color.White,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = modifier.align(Alignment.Center),
+            text = "Movie Screen"
         )
         val movies = moviesManager.moviesResponse.value
 
         LazyColumn{
-
             items(movies){ movie ->
-                MovieCard(movieItem = movie, navController = navController)
+                MovieCard(movie = movie, navController = navController)
             }
         }
     }
@@ -58,31 +56,35 @@ fun MovieScreen(modifier: Modifier = Modifier, moviesManager: MoviesManager, nav
 }
 @Composable
 fun MovieCard(
-    movieItem: Movie,
+    movie: Movie,
     navController: NavController
 ){
     Column(
         modifier = Modifier
             .border(1.dp, Color.Red, shape = RoundedCornerShape(10.dp))
             .padding(5.dp)
+            .fillMaxWidth()
             .clickable {
-                Log.i("MovieCard", "Clicked ${movieItem.title}")
-                navController.navigate("movieDetail/${movieItem.id}")
+                navController.navigate("movieDetail/${movie.id}")
             }
     ){
         Row(
             modifier = Modifier
-                .background(Color.DarkGray)
+                .background(color = Color.DarkGray)
                 .fillMaxWidth()
                 .padding(5.dp)
         ){
             AsyncImage(
+                modifier = Modifier
+                .fillMaxWidth(),
                 model = ImageRequest.Builder(
                     LocalContext.current
-                ).data("https://image.tmdb.org/t/p/w500${movieItem.poster_path}")
+                ).data("https://image.tmdb.org/t/p/w500/${movie.poster_path}")
                     .build(),
-                contentDescription = movieItem.overview)
+                contentDescription = movie.overview,
+                contentScale = ContentScale.FillWidth
+            )
         }
     }
-
 }
+
