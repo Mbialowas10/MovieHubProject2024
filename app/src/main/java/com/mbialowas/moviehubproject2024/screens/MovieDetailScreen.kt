@@ -81,6 +81,19 @@ fun MovieDetailScreen(
                             contentDescription = movie.overview,
                             contentScale = ContentScale.FillBounds
                         )
+                        Button(
+                            onClick = {
+
+                                Icon
+                            },
+
+                        ){
+                            Icon(
+                                imageVector = Icons.Default.Favorite,
+                                contentDescription = "Watch",
+                                tint = Color.White
+                            )
+                        }
                         movie.poster_path?.let {
                             Text(
                                 text =it

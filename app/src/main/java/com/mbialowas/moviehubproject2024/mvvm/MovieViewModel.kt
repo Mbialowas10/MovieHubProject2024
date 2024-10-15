@@ -26,10 +26,17 @@ class MovieViewModel : ViewModel() {
     // search term
     val searchTerm = mutableStateOf("")
 
+    // icon state
+    var movieIconStater = mutableStateOf<Map<Int,Boolean>> (emptyMap())
+
     val moviesResponse: MutableState<List<Movie>>
         @Composable get() = remember {
             movies
         }
+
+    fun updateMovieIconState(movieId: Int, newState: Boolean){
+        
+    }
 
     @OptIn(DelicateCoroutinesApi::class)
     fun searchMovies(movieName:String, database: AppDatabase){
