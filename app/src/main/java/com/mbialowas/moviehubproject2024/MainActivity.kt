@@ -31,6 +31,9 @@ import androidx.navigation.compose.composable
 
 
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.mbialowas.moviehubproject2024.Navigation.BottomNav
 import com.mbialowas.moviehubproject2024.api.MoviesManager
 import com.mbialowas.moviehubproject2024.api.model.Movie
@@ -63,9 +66,12 @@ class MainActivity : ComponentActivity() {
                     // initialize the viewmodel
                     val viewModel: MovieViewModel = ViewModelProvider(this)[MovieViewModel::class.java]
 
+                    // firestore db
+                    val fs_db = Firebase.firestore
+
                     // code to draw the screen goes here
 //                    MovieScreen(modifier = Modifier.padding(innerPadding))
-                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager,db, viewModel)
+                    App(navController = navController, modifier = Modifier.padding(innerPadding), moviesManager,db, viewModel, fs_db)
 
                 }
             }
@@ -75,7 +81,7 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManager: MoviesManager, db: AppDatabase, viewModel: MovieViewModel) {
+fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManager: MoviesManager, db: AppDatabase, viewModel: MovieViewModel, fs_db: FirebaseFirestore) {
     var movie by remember {
         mutableStateOf<Movie?>(null)
     }
@@ -110,7 +116,7 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
                         }
                     }
 
-                    movie?.let { MovieDetailScreen(it, modifier = Modifier.padding()) }
+                    movie?.let { MovieDetailScreen(it, modifier = Modifier.padding(), viewModel,db, fs_db)}
                 }
             }
         },

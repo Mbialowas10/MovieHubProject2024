@@ -1,6 +1,7 @@
 package com.mbialowas.moviehubproject2024.screens
 
 import android.util.Log
+import androidx.collection.mutableObjectIntMapOf
 import androidx.compose.foundation.background
 
 
@@ -35,15 +36,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.mbialowas.moviehubproject2024.api.model.Movie
+import com.mbialowas.moviehubproject2024.db.AppDatabase
+import com.mbialowas.moviehubproject2024.mvvm.MovieViewModel
 
 @Composable
 fun MovieDetailScreen(
     movie: Movie,
-    modifier: Modifier
+    modifier: Modifier,
+    viewModel: MovieViewModel,
+    database: AppDatabase,
+    fs_db: FirebaseFirestore
 ){
     //
-    val isIconChanged = false;
+    val isIconChanged = viewModel.movieIconState.value[movie.id] ?: false
 
     movie.originalTitle?.let { Log.i("Movie", it)}
     Box(
@@ -88,7 +98,25 @@ fun MovieDetailScreen(
                         }
                         Button(
                             onClick = {
-                                Log.i("Button", "Button Clicked")
+
+                                viewModel.updateMovieIconState(movie.id!!, database)
+                                Log.i("Favourite", isIconChanged.toString())
+
+                                // firestore db
+                                val collection: CollectionReference = FirebaseFirestore.getInstance().collection("movies")
+                                val m = hashMapOf(
+                                    "movie_id" to "${ movie.id }",
+                                    "movie_title" to "${ movie.title }",
+                                    "movie_overview" to "${ movie.overview }",
+                                    "movie_poster_path"     to      "${movie.poster_path}",
+                                    "movie_release_date"    to     "${movie.releaseDate}",
+                                    "movie_popularity"      to     "${movie.popularity}",
+                                    "movie_avg_vote"        to      "${movie.voteAverage}",
+                                    "movie_vote_count"      to      "${movie.voteCount}",
+                                    "isFavorite"   to     "${movie.isFavorite}"
+                                )
+
+                                )
                             },
                             modifier = Modifier
                                 .align(Alignment.TopEnd)

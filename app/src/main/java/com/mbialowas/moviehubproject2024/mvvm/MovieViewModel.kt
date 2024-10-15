@@ -26,10 +26,14 @@ class MovieViewModel : ViewModel() {
     // search term
     val searchTerm = mutableStateOf("")
 
+    // variable to keep track of Movie Icon state
+    var movieIconState = mutableStateOf <Map<Int,Boolean>>(emptyMap())
+
     val moviesResponse: MutableState<List<Movie>>
         @Composable get() = remember {
             movies
         }
+
 
     @OptIn(DelicateCoroutinesApi::class)
     fun searchMovies(movieName:String, database: AppDatabase){
@@ -57,6 +61,20 @@ class MovieViewModel : ViewModel() {
     fun saveSearchTerm(term:String){
         searchTerm.value = term
 
+    }
+
+    fun updateMovieIconState(movieId: Int, database: AppDatabase){
+        GlobalScope.launch {
+            database.movieDao().getMovieById(movieId)?.let { movie ->
+                movie.isFavorite = !movie.isFavorite!!
+                database.movieDao().updateMovie(movie)
+
+                // update state in view model
+                movieIconState.value = movieIconState.value.toMutableMap().apply {
+                    this[movieId] = movie.isFavorite!!
+                }
+            }
+        }
     }
 
 }
