@@ -27,15 +27,24 @@ class MovieViewModel : ViewModel() {
     val searchTerm = mutableStateOf("")
 
     // icon state
-    var movieIconStater = mutableStateOf<Map<Int,Boolean>> (emptyMap())
+    var movieIconState = mutableStateOf<Map<Int,Boolean>> (emptyMap())
 
     val moviesResponse: MutableState<List<Movie>>
         @Composable get() = remember {
             movies
         }
 
-    fun updateMovieIconState(movieId: Int, newState: Boolean){
-        
+    fun updateMovieIconState(movieId: Int, newState: Boolean, database: AppDatabase){
+        GlobalScope.launch {
+            database.movieDao().getMovieById(movieId).let{ movie ->
+                movie?.isFavorite = !movie?.isFavorite!!
+                database.movieDao().updateMovie(movie)
+
+                movieIconState.value = movieIconState.value.toMutableMap().apply{
+                    this[movieId] = movie.isFavorite!!
+                }
+            }
+        }
     }
 
     @OptIn(DelicateCoroutinesApi::class)

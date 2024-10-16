@@ -16,6 +16,7 @@ interface MovieDao {
     @Query("SELECT * FROM movies WHERE id = :id")
     fun getMovieById(id: Int): Movie?
 
+    // update movies where movie id matches
     @Update
     fun updateMovie(movie: Movie)
 
