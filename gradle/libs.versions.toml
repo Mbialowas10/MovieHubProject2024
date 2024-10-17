@@ -17,6 +17,7 @@ roomRuntime = "2.6.1"
 ksp="1.9.0-1.0.13"
 googleGmsGoogleServices = "4.4.2"
 firebaseFirestore = "25.1.0"
+firebaseAuth = "23.0.0"
 
 
 [libraries]
@@ -44,6 +45,7 @@ androidx-room-room-compiler={module="androidx.room:room-compiler", version.ref="
 androidx-room-runtime={module="androidx.room:room-runtime", version.ref="roomRuntime"}
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 
 [plugins]
