@@ -23,6 +23,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,11 +42,15 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.mbialowas.moviehubproject2024.api.model.Movie
 import com.mbialowas.moviehubproject2024.db.AppDatabase
 import com.mbialowas.moviehubproject2024.mvvm.MovieViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @Composable
 fun MovieDetailScreen(
@@ -53,7 +61,8 @@ fun MovieDetailScreen(
     fs_db: FirebaseFirestore
 ){
     //
-    val isIconChanged = viewModel.movieIconState.value[movie.id] ?: false
+    var isIconChanged = viewModel.movieIconState.value[movie.id] ?: false
+    var lastInsertedDocument by remember{mutableStateOf<DocumentReference?>(null)}
 
     movie.originalTitle?.let { Log.i("Movie", it)}
     Box(
@@ -98,25 +107,61 @@ fun MovieDetailScreen(
                         }
                         Button(
                             onClick = {
-
+                                isIconChanged = !isIconChanged
                                 viewModel.updateMovieIconState(movie.id!!, database)
+                                var movieExists:Boolean? = null
+
                                 Log.i("Favourite", isIconChanged.toString())
 
                                 // firestore db
-                                val collection: CollectionReference = FirebaseFirestore.getInstance().collection("movies")
+                                val collection: CollectionReference =
+                                    FirebaseFirestore.getInstance().collection("movies")
                                 val m = hashMapOf(
-                                    "movie_id" to "${ movie.id }",
-                                    "movie_title" to "${ movie.title }",
-                                    "movie_overview" to "${ movie.overview }",
-                                    "movie_poster_path"     to      "${movie.poster_path}",
-                                    "movie_release_date"    to     "${movie.releaseDate}",
-                                    "movie_popularity"      to     "${movie.popularity}",
-                                    "movie_avg_vote"        to      "${movie.voteAverage}",
-                                    "movie_vote_count"      to      "${movie.voteCount}",
-                                    "isFavorite"   to     "${movie.isFavorite}"
+                                    "movie_id" to "${movie.id}",
+                                    "movie_title" to "${movie.title}",
+                                    "movie_overview" to "${movie.overview}",
+                                    "movie_poster_path" to "${movie.poster_path}",
+                                    "movie_release_date" to "${movie.releaseDate}",
+                                    "movie_popularity" to "${movie.popularity}",
+                                    "movie_avg_vote" to "${movie.voteAverage}",
+                                    "movie_vote_count" to "${movie.voteCount}",
+                                    "isFavorite" to "${movie.isFavorite}"
                                 )
+                                // global scope.
+                                GlobalScope.launch {
+                                    movieExists = doesMovieExist(movie.id.toString(), collection)
 
-                                )
+                                    if (isIconChanged){
+                                        if (movieExists == true){
+                                            Log.d("FS", "Sorry you can't insert the same movie, try again :(")
+                                        }
+                                        else {
+                                            fs_db.collection("movies").add(m)
+                                                .addOnSuccessListener { documentReference ->
+                                                    lastInsertedDocument = documentReference
+                                                    Log.d(
+                                                        "FS",
+                                                        "DocumentSnapshot added with ID: ${documentReference.id}"
+                                                    )
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Log.w("FS", "Error adding document", e)
+                                                }
+                                        }
+                                    }else if(isIconChanged == false){
+                                        lastInsertedDocument?.delete()
+                                            ?.addOnSuccessListener {
+                                                Log.i("Removal", "${movie.title} removed from firestore")
+                                            }
+                                            ?.addOnFailureListener { e->
+                                                Log.i(
+                                                    "Removal",
+                                                    "THERE WAS A PROBLEM REMOVING THE MOVIE FROM FIRESTORE ${e.message}"
+                                                )
+                                            }
+                                    }
+
+                                } //end global scope
                             },
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
@@ -179,4 +224,9 @@ fun MovieDetailScreen(
                 }
             }
 
+}
+
+suspend fun doesMovieExist(movieID: String, collection: CollectionReference): Boolean {
+    val querySnapshot = collection.whereEqualTo("movie_id", movieID).get().await()
+    return !querySnapshot.isEmpty
 }

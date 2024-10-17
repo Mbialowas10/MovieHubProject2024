@@ -103,7 +103,7 @@ fun App(navController: NavController, modifier: Modifier = Modifier ,moviesManag
                     MovieScreen(modifier = modifier, moviesManager ,navController)
                 }
                 composable(Destination.Watch.route) {
-                    WatchScreen()
+                    WatchScreen(modifier = Modifier.padding(innerPadding), navController)
                 }
                 composable(Destination.Search.route) {
                     SearchScreen(modifier = Modifier.padding(innerPadding), viewModel, db, navController)
