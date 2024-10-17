@@ -34,7 +34,7 @@ class MovieViewModel : ViewModel() {
             movies
         }
 
-    fun updateMovieIconState(movieId: Int, newState: Boolean, database: AppDatabase){
+    fun updateMovieIconState(movieId: Int, database: AppDatabase){
         GlobalScope.launch {
             database.movieDao().getMovieById(movieId).let{ movie ->
                 movie?.isFavorite = !movie?.isFavorite!!
