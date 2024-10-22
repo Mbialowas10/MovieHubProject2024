@@ -1,6 +1,8 @@
 package com.mbialowas.moviehubproject2024.screens
 
 import android.content.Context
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,61 +23,68 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
+import com.mbialowas.moviehubproject2024.MainActivity
 
 @Composable
-fun SignInScreen(context: Context, modifier: Modifier = Modifier){
-    // state-level variables
+fun SignInScreen(context: Context, modifier: Modifier = Modifier) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(false) }
-    var error by remember { mutableStateOf(false) }
-    val keyController = LocalSoftwareKeyboardController.current
+    var error by remember { mutableStateOf<String?>(null) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize(1f)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ){
-
+    ) {
         TextField(
             value = email,
             onValueChange = { email = it },
             modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(8.dp),
             label = { Text("Email") },
-            keyboardController = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
         )
+
         TextField(
             value = password,
             onValueChange = { password = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            label = {Text("Password")},
-            keyboardController = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
+            label = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
         )
-//        if (error != null){
-//            Text(
-//                text =error!!,
-//                color = Color.Red,
-//                modifier = Modifier.padding(8.dp)
-//            )
-//        }
+
+        if (error != null) {
+            Text(
+                text = error!!,
+                color = Color.Red,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+
         Button(
             onClick = {
-//                keyController?.hide()
-//                loading = true
-//                error = null
-                performSignIn(email, password, context, keyboardController = keyController)
-            }
-        ){
-            Text(text="Sign In")
+                // Perform Firebase authentication
+                if (keyboardController != null) {
+                    performSignIn(email, password, context, keyboardController)
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(text = "Sign In")
         }
     }
 }
@@ -87,4 +96,20 @@ private fun performSignIn(
     keyboardController: SoftwareKeyboardController
 ) {
     val auth = FirebaseAuth.getInstance()
+
+    auth.signInWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(context, "Sign in successful", Toast.LENGTH_SHORT).show()
+                var intent = Intent(context, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.putExtra("userID", FirebaseAuth.getInstance().currentUser?.email)
+                context.startActivity(intent)
+            } else {
+                Toast.makeText(context, "Sign in failed", Toast.LENGTH_SHORT).show()
+            }
+            keyboardController?.hide()
+        }
+
+
 }
