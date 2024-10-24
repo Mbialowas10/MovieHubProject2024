@@ -33,6 +33,7 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+
 @Composable
 fun MovieHubProject2024Theme(
     darkTheme: Boolean = isSystemInDarkTheme(),
